@@ -432,3 +432,4 @@ D:\asp.net\AppointmentScheduling\AppointmentScheduling\bin\Debug\net5.0\runtimes
 D:\asp.net\AppointmentScheduling\AppointmentScheduling\bin\Debug\net5.0\libman.json
 D:\asp.net\AppointmentScheduling\AppointmentScheduling\obj\Debug\net5.0\Razor\Views\Account\Login.cshtml.g.cs
 D:\asp.net\AppointmentScheduling\AppointmentScheduling\obj\Debug\net5.0\Razor\Views\Account\Register.cshtml.g.cs
+D:\asp.net\AppointmentScheduling\AppointmentScheduling\obj\Debug\net5.0\Razor\Views\Shared\_LoginPartial.cshtml.g.cs

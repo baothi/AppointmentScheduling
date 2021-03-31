@@ -1,5 +1,4 @@
-﻿@*@inject Microsoft.AspNetCore.Identity.SignInManager<AppointmentScheduling.Models.ApplicationUser> signInManager*@
-@inject Microsoft.AspNetCore.Identity.SignInManager<Microsoft.AspNetCore.Identity.IdentityUser> signInManager
+﻿@inject Microsoft.AspNetCore.Identity.SignInManager<AppointmentScheduling.Models.ApplicationUser> signInManager
 @if (signInManager.IsSignedIn(User))
 {
     <form method="post" id="logoutForm" asp-action="Logoff" asp-controller="Account">

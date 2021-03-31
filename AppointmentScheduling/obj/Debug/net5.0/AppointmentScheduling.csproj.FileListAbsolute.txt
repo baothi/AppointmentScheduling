@@ -433,4 +433,3 @@ D:\asp.net\AppointmentScheduling\AppointmentScheduling\bin\Debug\net5.0\libman.j
 D:\asp.net\AppointmentScheduling\AppointmentScheduling\obj\Debug\net5.0\Razor\Views\Account\Login.cshtml.g.cs
 D:\asp.net\AppointmentScheduling\AppointmentScheduling\obj\Debug\net5.0\Razor\Views\Account\Register.cshtml.g.cs
 D:\asp.net\AppointmentScheduling\AppointmentScheduling\obj\Debug\net5.0\Razor\Views\Shared\_LoginPartial.cshtml.g.cs
-D:\asp.net\AppointmentScheduling\AppointmentScheduling\obj\Debug\net5.0\AppointmentScheduling.csprojAssemblyReference.cache

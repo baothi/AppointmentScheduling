@@ -12,6 +12,7 @@ namespace AppointmentScheduling.Controllers
     {
         private readonly IAppointmentService _appointmentService;
 
+
         public AppointmentController(IAppointmentService appointmentService)
         {
             _appointmentService = appointmentService;

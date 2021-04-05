@@ -100,6 +100,11 @@ function onShowModal(obj, isEventDetail) {
 } 
 
 function onCloseModal() {
+    $("#apointmentForm")[0].reset();
+    $("#id").val(0);
+    $("#title").val('');
+    $("#description").val('');
+    $("#appointmentDate").val('');
     $("#appointmentInput").modal("hide");
 } 
 
@@ -124,7 +129,7 @@ function onSubmitForm() {
             contentType: 'application/json',
             success: function (response) {
                 if (response.status === 1 || response.status === 2) {
-                    /*calendar.refetchEvents();*/
+                    calendar.refetchEvents();
                     $.notify(response.message, "success");
                     onCloseModal();
                 }

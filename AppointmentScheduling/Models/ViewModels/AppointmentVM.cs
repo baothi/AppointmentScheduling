@@ -7,7 +7,7 @@ namespace AppointmentScheduling.Models.ViewModels
 {
     public class AppointmentVM
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string StartDate { get; set; }
@@ -23,4 +23,5 @@ namespace AppointmentScheduling.Models.ViewModels
         public string AdminName { get; set; }
         public bool IsForClient { get; set; }
     }
+
 }

@@ -89,7 +89,7 @@ namespace AppointmentScheduling.Migrations
 
             modelBuilder.Entity("AppointmentScheduling.Models.Appointment", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);

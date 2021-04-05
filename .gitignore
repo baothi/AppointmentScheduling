@@ -453,3 +453,5 @@ $RECYCLE.BIN/
 ./obj
 
 ## https://topdev.vn/blog/gitignore-la-gi/
+
+.vs/AppointmentScheduling

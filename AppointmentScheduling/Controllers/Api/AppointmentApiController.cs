@@ -104,7 +104,7 @@ namespace AppointmentScheduling.Controllers.Api
             return Ok(commonResponse);
         }
 
-        /*[HttpGet]
+        [HttpGet]
         [Route("DeleteAppoinment/{id}")]
         public async Task<IActionResult> DeleteAppoinment(int id)
         {
@@ -150,6 +150,6 @@ namespace AppointmentScheduling.Controllers.Api
                 commonResponse.status = Helper.failure_code;
             }
             return Ok(commonResponse);
-        }*/
+        }
     }
 }

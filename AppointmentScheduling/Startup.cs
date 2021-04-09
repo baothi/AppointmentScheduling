@@ -2,6 +2,8 @@ using AppointmentScheduling.DbInitializer;
 using AppointmentScheduling.Models;
 using AppointmentScheduling.Services;
 using AppointmentScheduling.Utility;
+using EmailService;
+using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -15,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace AppointmentScheduling
 {
@@ -37,18 +40,27 @@ namespace AppointmentScheduling
             services.AddTransient<IAppointmentService, AppointmentService>();
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddDistributedMemoryCache();
-            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<EmailService.IEmailSender, EmailSender>();
             services.AddScoped<IDbInitializer, DbInitializer.DbInitializer>();
+            services.AddHangfire(config =>
+            {
+                config.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection"));
+            });
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromDays(10);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+            var emailConfig = Configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+            services.AddSingleton(emailConfig);
             services.ConfigureApplicationCookie(options =>
             {
                 options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Home/AccessDenied");
             });
+
             services.AddHttpContextAccessor();
         }
 
@@ -71,13 +83,26 @@ namespace AppointmentScheduling
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            //app.UseCookieAuthentication()
             app.UseSession();
             dbInitializer.Initalize();
+            //GlobalConfiguration.Configuration.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection"));
+            app.UseHangfireDashboard("/myhangfire", new DashboardOptions
+            {
+                Authorization = new[] { new HangfireAthorizationFilter() }
+            });
+            /* BackgroundJob.Schedule(() =>
+
+                 System.IO.File.AppendAllText(@"C:\Users\thinguyen\Downloads\exampleOfHangfire\exampleOfHangfire\App_Data\log.txt", DateTime.Now.ToString() + Environment.NewLine)
+
+             , TimeSpan.FromSeconds(5));*/
+            RecurringJob.AddOrUpdate(() => Console.WriteLine("Recurring!"), Cron.Minutely);
+            app.UseHangfireServer();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Appointment}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

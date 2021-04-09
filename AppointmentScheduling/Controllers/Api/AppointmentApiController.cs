@@ -30,12 +30,12 @@ namespace AppointmentScheduling.Controllers.Api
 
         [HttpPost]
         [Route("SaveCalendarData")]
-        public IActionResult SaveCalendarData(AppointmentVM data)
+        public async Task<IActionResult> SaveCalendarData(AppointmentVM data)
         {
             CommonResponse<int> commonResponse = new CommonResponse<int>();
             try
             {
-                commonResponse.status = _appointmentService.AddUpdate(data).Result;
+                commonResponse.status = await _appointmentService.AddUpdate(data);
                 if (commonResponse.status == 1)
                 {
                     commonResponse.message = Helper.appointmentUpdated;

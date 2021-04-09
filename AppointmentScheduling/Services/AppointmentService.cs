@@ -1,9 +1,11 @@
 ﻿using AppointmentScheduling.Models;
 using AppointmentScheduling.Models.ViewModels;
 using AppointmentScheduling.Utility;
-using Microsoft.AspNetCore.Identity.UI.Services;
+using EmailService;
+using Microsoft.Extensions.Hosting.Internal;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,11 +15,13 @@ namespace AppointmentScheduling.Services
     {
         private readonly ApplicationDbContext _db;
         private readonly IEmailSender _emailSender;
+        private readonly EmailConfiguration _emailConfig;
 
-        public AppointmentService(ApplicationDbContext db, IEmailSender emailSender)
+        public AppointmentService(ApplicationDbContext db, IEmailSender emailSender, EmailConfiguration emailCongig)
         {
             _db = db;
             _emailSender = emailSender;
+            _emailConfig = emailCongig;
         }
 
         public async Task<int> AddUpdate(AppointmentVM model)
@@ -26,10 +30,16 @@ namespace AppointmentScheduling.Services
             var endDate = DateTime.Parse(model.StartDate).AddMinutes(Convert.ToDouble(model.Duration));
             var patient = _db.Users.FirstOrDefault(u => u.Id == model.PatientId);
             var doctor = _db.Users.FirstOrDefault(u => u.Id == model.DoctorId);
+            //var message = new Mesage(new string[] { "dicentral@hingeto.com" }, "Test email async", "This is the content from our email.");//File.ReadAllText(path).Replace()
+
+            var mesageBody = File.ReadAllText(Path.Combine(_emailConfig.TemplatesPath, "WelcomeEmail.cshtml"));
+            mesageBody = mesageBody.Replace("[UserName]", model.AdminName);
+
+            var message = new Mesage(new string[] { "dicentral@hingeto.com" }, "Test email async", mesageBody);
             if (model != null && model.Id > 0)
             {
                 //update
-                var appointment = _db.Appointments.FirstOrDefault(x => x.Id == model.Id);
+                var appointment = _db.Appointments.Single(x => x.Id == model.Id);
                 appointment.Title = model.Title;
                 appointment.Description = model.Description;
                 appointment.StartDate = startDate;
@@ -39,8 +49,7 @@ namespace AppointmentScheduling.Services
                 appointment.PatientId = model.PatientId;
                 appointment.IsDoctorApproved = false;
                 appointment.AdminId = model.AdminId;
-                await _db.SaveChangesAsync();
-                return 1;
+                return (await _db.SaveChangesAsync() == 1 ? 1 : -1);
             }
             else
             {
@@ -58,14 +67,14 @@ namespace AppointmentScheduling.Services
                     AdminId = model.AdminId
                 };
                 _db.Appointments.Add(appointment);
-                await _emailSender.SendEmailAsync(doctor.Email, "Appointment Created",
+                /*await _emailSender.SendEmailAsync(doctor.Email, "Appointment Created",
                     $"Your appointment with {patient.Name} is created and in pending status");
                 await _emailSender.SendEmailAsync(patient.Email, "Appointment Created",
-                    $"Your appointment with {doctor.Name} is created and in pending status");
-                await _db.SaveChangesAsync();
-                return 2;
-
+                    $"Your appointment with {doctor.Name} is created and in pending status");*/
+                await _emailSender.SendEmailAsync(message);
+                return (await _db.SaveChangesAsync() == 1 ? 2 : -2);
             }
+            return 0;
         }
 
         public async Task<int> ConfirmEvent(int id)

@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace AppointmentScheduling.Utility
 {
-    public class EmailSender : IEmailSender
+   /* public class EmailSender : IEmailSender
     {
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
             MailjetClient client = new MailjetClient("5736779dd3983b97eed3d675b66149d1", "1ad13ae93cfae439322650abdc55c9a2")
             {
-                /*Version = ApiVersion.V3_1,*/
+                *//*Version = ApiVersion.V3_1,*//*
             };
             MailjetRequest request = new MailjetRequest
             {
@@ -32,5 +32,5 @@ namespace AppointmentScheduling.Utility
                 });
             MailjetResponse response = await client.PostAsync(request);
         }
-    }
+    }*/
 }
